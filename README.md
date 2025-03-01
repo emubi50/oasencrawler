@@ -1,25 +1,18 @@
-# Oasencrawler
-Oasencrawler is a 2D dungeon crawler game written in C++. In this game, the player explores a randomly generated world, collecting relics while avoiding dangers. The game is won by finding all relics and lost if the character runs out of health points.
+# Arid Expanse
+"Arid Expanse" is a trilogy of 2D dungeon crawler games written in C++. In this game, the player explores a randomly generated world, collecting relics while avoiding dangers. The first game is won by finding all relics and lost if the character runs out of health points. The second and third games are played in survival mode, meaning that there is no winning condition.
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
-* [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
+* [Features](#features) <!-- \n* [Screenshots](#screenshots) --><!-- \n* [Setup](#setup) -->
 * [Usage](#usage)
 * [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
+* [Room for Improvement](#room-for-improvement) <!-- \n* [Acknowledgements](#acknowledgements) -->
 * [Contact](#contact)
-<!-- * [License](#license) -->
+* [License](#license)
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
 This project is a university project and serves to solidify my understanding of classes and objects.
 <!-- You don't have to answer all the questions - just the ones relevant to your project. -->
 
@@ -33,19 +26,22 @@ This project is a university project and serves to solidify my understanding of 
   - **Empty Fields**: Nothing happens.  
   - **Dangers**: May cause damage to the character.  
   - **Wells**: Restore health points.  
-  - **Relics**: Collect to win the game.  
+  - **Relics**: Collect to win the game.
+  - **Hunter**: An enemy hunting down the character.
 - Player character with:  
   - Health points (starting at 5).  
-  - Relic points (starting at 0).  
+  - Relic points (starting at 0).
+  - 3 addition attributes (to be determined).  
   - Movable on the grid with user input.  
 - Console-based visualization of the game world and character position.  
 - Endgame conditions:  
-  - Win by collecting all relics.  
-  - Lose by losing all health points. 
+  - Win by collecting all relics. (Game 1)
+  - Lose by losing all health points.
+  - Lose by getting caught by the Hunter.
 
-##Planned Features
+## Planned Features
 - Enemies that chase the player.
-- Increasing difficulty as relics are collected
+- Increasing difficulty as relics are collected.
 - Additional character atrributes and items for enhanced gameplay.
 
 
@@ -65,22 +61,26 @@ Proceed to describe how to install / setup one's local environment / get started
 - Use the keyboard (WASD) to move the character around the grid.
 - Avoid dangers and collect all relics to win.
 - Rest at wells to regain health points.
+- Avoid the Hunter to not die.
 
 ## Project Status
 Project is: _in progress_.
 
-<!--
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
+## Room for Improvement
+<!--
+Include areas you believe need improvement / could be improved. Also add TODOs for future development.
+-->
+<!--
 Room for improvement:
 - Improvement to be done 1
 - Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
 -->
+To do:
+- Develop 'Stufe 3'
+- Merge all three games into one.
+- Create a menu in main() to select between the three games.
+
 
 <!--
 ## Acknowledgements
@@ -91,12 +91,12 @@ Give credit here.
 -->
 
 ## Contact
-Created by [@emubi50](https://www.github/emubi50/) - feel free to contact me!
+Created by [@emubi50](https://www.github.com/emubi50/) - feel free to contact me!
 
 
 <!-- Optional -->
 ## License
-Default copyright laws apply. All rights are retained and no one may reproduce, distribute, or create derivative works from this project.
+Default copyright laws apply. All rights are retained and the reproduction, distribution, or creation of derivative works from this project are forbidden.
 <!-- This project is open source and available under the [... License](). -->
 
 <!-- You don't have to include all sections - just the one's relevant to your project -->
