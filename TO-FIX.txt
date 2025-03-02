@@ -1,0 +1,12 @@
+BUG:
+
+General:
+
+Skips Intro and goes straight to the game interface.
+
+Stufe 1:
+Dialogue is being skipped before the Game Over message.
+If player position is the same as the hidden enemy position, the game still ends with being caught.
+
+Stufe 3:
+While mechanics work, dialogue is being skipped.

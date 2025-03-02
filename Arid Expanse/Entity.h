@@ -14,6 +14,12 @@ public:
 	Position position;
 	int health;
 	int relics;
+	int constitution;
+	int dexterity;
+	int wisdom;
+	int conItems;
+	int dexItems;
+	int wisItems;
 
 };
 

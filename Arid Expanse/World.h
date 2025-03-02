@@ -11,6 +11,7 @@ public:
 	~World();
 	// Functions
 	void displayWorld(int px, int py, int ex, int ey);
+	void displayWorld(int px, int py);
 	void displayTileTypes();
 	// Variables
 	Field world[5][5];
