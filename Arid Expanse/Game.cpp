@@ -2,9 +2,10 @@
 #include <iostream>
 #include "Game.h"
 
-Game::Game(int level)
+Game::Game(int stage)
 {
-	this->level = level;
+	//initialize the game and 
+	this->stage = stage;
 	difficulty = 4;
 	emptyChance = 4;
 	dangerChance = 4;
@@ -27,7 +28,7 @@ void Game::printSeparator()
 void Game::startGame()
 {
 	system("cls");
-	switch (level)
+	switch (stage)
 	{
 	case 1:
 		std::cout << "Welcome to Oasis of Sands!" << std::endl;
@@ -43,7 +44,9 @@ void Game::startGame()
 			std::endl << "armed with nothing but your wits, your will, and the hope of uncovering the truth buried beneath the dunes." << std::endl;
 		printSeparator();
 		std::cout << "Press ENTER to continue..." << std::endl;
+		std::cin.ignore(1000, '\n');
 		std::cin.get();
+		run();
 		break;
 	case 2:
 		std::cout << "Welcome to Echoes of Dunes!" << std::endl;
@@ -59,12 +62,14 @@ void Game::startGame()
 			std::endl << "and it does not forget easily." << std::endl;
 		printSeparator();
 		std::cout << "Press ENTER to continue..." << std::endl;
+		std::cin.ignore(1000, '\n');
 		std::cin.get();
+		run();
 		break;
 	case 3:
 		std::cout << "Welcome to Mirage of Fate!" << std::endl;
 		printSeparator();
-		std::cout << "The deert stretches beyond sight, an endless ocean of sand where time and truth waver like a distant mirage." <<
+		std::cout << "The desert stretches beyond sight, an endless ocean of sand where time and truth waver like a distant mirage." <<
 			std::endl << "The relics, long buried beneath the shifting dunes, whisper of an ancient fate - one that binds you to this cursed expanse." << std::endl <<
 			std::endl << "Survival is no longer a matter of endurance alone. The desert itself weighs your strength, your resolve, your cunning." <<
 			std::endl << "Each step through teh scorching wasteland may test a different facet of your being." <<
@@ -74,10 +79,12 @@ void Game::startGame()
 			std::endl << "Yet, with every cycle, the desert awakens anew. The trials grow harsher, the mirage ever more elusive" <<
 			std::endl << "How long will you last before the sands claim as their own?" << std::endl;
 		printSeparator();
+		std::cout << "Presee ENTER to continue..." << std::endl;
+		std::cin.ignore(1000, '\n');
 		std::cin.get();
+		run();
 		break;
 	}
-	run();
 }
 
 void Game::increaseDifficulty()
@@ -88,7 +95,7 @@ void Game::increaseDifficulty()
 
 void Game::displayGame()
 {
-	if (level > 1)
+	if (stage > 1)
 	{
 		disboard.displayWorld(player.position.x, player.position.y, enemy.position.x, enemy.position.y);
 	}
@@ -104,15 +111,15 @@ void Game::displayGame()
 void Game::run()
 {
 	system("cls");
-	if (level == 1)
+	if (stage == 1)
 	{
 		std::cout << "The sun beats down, and the sands stretch endlessly before you..." << std::endl;
 	}
-	else if (level == 2)
+	else if (stage == 2)
 	{
 		std::cout << "The wind whispers, and the echoes of the dunes call out..." << std::endl;
 	}
-	else if (level == 3)
+	else if (stage == 3)
 	{
 		std::cout << "The mirage shimmers, and the sands shift beneath your feet..." << std::endl;
 	}
@@ -120,21 +127,27 @@ void Game::run()
 	enemy.position.y = 4;
 	do
 	{
-		if ((player.relics == disboard.totalRelics && level == 1) || (player.position.x == enemy.position.x && player.position.y == enemy.position.y && level > 1) || player.health <= 0)
+		if ((player.relics == disboard.totalRelics && stage == 1) || (player.position.x == enemy.position.x && player.position.y == enemy.position.y && stage > 1) || player.health <= 0)
 		{
 			endGame();
 		}
-		else if (disboard.totalRelics == 0 && level > 1)
+		else if (disboard.relicsFound == disboard.totalRelics && stage > 1)
 		{
 			increaseDifficulty();
 			disboard = World(emptyChance, dangerChance, wellChance, relicChance, disboard.previousPosition);
 		}
-		//disboard.displayTileTypes();
+		//start debug infos
+		disboard.displayTileTypes();
+		std::cout << "Tile Type: " << disboard.world[player.position.y][player.position.x].type << std::endl;
+		std::cout << "Total Relics on the map: " << disboard.totalRelics << std::endl;
+		std::cout << "Player Relics: " << player.relics << std::endl;
+		std::cout << "Items (CON/DEX/WIS): " << player.conItems << "/" << player.dexItems << "/" << player.wisItems << std::endl;
+		//end debug infos
 		printSeparator();
 		displayGame();
 		movePlayer();
 		system("cls");
-		if (level > 1)
+		if (stage > 1)
 		{
 			moveEnemy();
 		}
@@ -143,7 +156,6 @@ void Game::run()
 		disboard.previousPosition = player.position;
 		
 	} while (player.health > 0);
-	endGame();
 }
 
 void Game::movePlayer()
@@ -252,7 +264,7 @@ void Game::moveEnemy()
 
 void Game::evaluateField()
 {
-	if (player.relics == disboard.totalRelics && level == 1)
+	if (player.relics == disboard.totalRelics && stage == 1)
 	{
 		endGame();
 	}
@@ -267,6 +279,7 @@ void Game::evaluateField()
 	else
 	{
 		printFieldMessage(disboard.world[player.position.y][player.position.x].type);
+		disboard.world[player.position.y][player.position.x].type = Field::FieldType::EMPTY;
 	}
 	
 }
@@ -291,10 +304,9 @@ void Game::printFieldMessage(Field::FieldType type)
 				std::endl << "The Arid Expanse is a harsh and unforgiving land, where only the strong survive." << std::endl;
 			break;
 		}
-
 		break;
 	case Field::FieldType::DANGER:
-		if (level < 3)
+		if (stage < 3)
 		{
 			//danger attacks player
 			if (rand() % 24 < difficulty)
@@ -323,19 +335,18 @@ void Game::printFieldMessage(Field::FieldType type)
 				case 0:
 					std::cout << "Suddenly, the sands beneath you crack open, and a sharp thorn-like spike juts out from the ground." <<
 						std::endl << "You feel a sharp sting as it grazes your side, leaving a painful mark." << std::endl;
-					player.health--;
 					break;
 				case 1:
 					std::cout << "Out of nowhere, the desert floor erupts with a violent surge of sand, throwing you back." <<
 						std::endl << "You stagger, your chest tightening from the force of the impact." << std::endl;
-					player.health--;
 					break;
 				case 2:
 					std::cout << "A fierce sandstorm swirls toward you from the horizon, slamming into your body with a brutal gust." <<
 						std::endl << "The sting of sand cuts into your skin, and you struggle to steady yourself against the onslaught." << std::endl;
-					player.health--;
 					break;
 				}
+				player.health--;
+				std::cout << "[-1 hp]" << std::endl;
 			}
 		}
 		else
@@ -348,12 +359,14 @@ void Game::printFieldMessage(Field::FieldType type)
 				std::cout << "The scorching heat beats down on you, sapping your strength with every step" <<
 					std::endl << "Your vision blurs as exhaustion threatens to overwhelm you." <<
 					std::endl << "Roll a Constitution Saving Throw!" << std::endl;
-				if (rollSavingThrow(dangerChance, (player.conItems) ? true : false))
+				if (rollSavingThrow((20 - player.constitution) + (difficulty - 4), 0, player.conItems))
 				{
+					system("cls");
 					std::cout << "You grit your teeth and push forward, drawing on sheer willpower to endure the relentless sun." << std::endl;
                 }
 				else
 				{
+					system("cls");
 					std::cout << "Your legs give way, and you collapse to your knees, the desert greedily stealing your breath as your body weakens." << std::endl;
 					player.health--;
 				}
@@ -363,14 +376,17 @@ void Game::printFieldMessage(Field::FieldType type)
 				std::cout << "A sudden tremor shifts the sand beneath your feet, revealing a hidden sinkhole." <<
 					std::endl << "Before you can react, the ground starts to pull you downward." <<
 					std::endl << "Roll a Dexterity Saving Throw!" << std::endl;
-				if (rollSavingThrow(dangerChance, (player.dexItems > 0) ? true : false))
+				if (rollSavingThrow((20 - player.dexterity) + (difficulty - 4), 1, player.dexItems))
 				{
+					system("cls");
 					std::cout << "You leap to solid ground just in time, landing with a stumble but unharmed." << std::endl;
 				}
 				else
 				{
+					system("cls");
 					std::cout << "The sand engulfs your legs, dragging you down as you desperately struggle to escape." << std::endl;
 					player.health--;
+					std::cout << "[-1 hp]" << std::endl;
 				}
 				break;
 			case 2:
@@ -378,14 +394,19 @@ void Game::printFieldMessage(Field::FieldType type)
 				std::cout << "A distant shimmer on the horizon promises water, but something feels off." <<
 					std::endl << "The desert is known for its cruel mirages, and one wrong turn could lead you further from salvation." <<
 					std::endl << "Roll a Wisdom Saving Throw!" << std::endl;
-				if (rollSavingThrow(dangerChance, (player.wisItems > 0) ? true : false))
+				if (rollSavingThrow((20 - player.wisdom) + (difficulty - 4), 2, player.wisItems))
 				{
+					system("cls");
 					std::cout << "You trust your instincts and change course, avoiding a deadly wasteland." << std::endl;
+					player.health--;
+					std::cout << "[-1 hp]" << std::endl;
 				}
 				else
 				{
+					system("cls");
 					std::cout << "You chase the illusion, only to find yourself lost and disoriented in the endless dunes." << std::endl;
 					player.health--;
+					std::cout << "[-1 hp]" << std::endl;
 				}
 				break;
 			}
@@ -393,7 +414,7 @@ void Game::printFieldMessage(Field::FieldType type)
 		break;
 	case Field::FieldType::WELL:
 		std::cout << "You see a well." << std::endl;
-		if (level < 3)
+		if (stage < 3)
 		{
 			//possibility of obtaining an item
 			if (rand() % 100 >= 70)
@@ -405,16 +426,22 @@ void Game::printFieldMessage(Field::FieldType type)
 					std::cout << "As you draw closer to the well, something catches your eye at the edge. Beneath the surface," <<
 						std::endl << "you discover a scorched desert cloack woven from thick desert plans and animal hides, whethered by the sun's relentless heat." << std::endl;
 					player.conItems++;
+					(player.conItems % 2 == 0) ? player.constitution++ : player.constitution;
+					std::cout << "[SCORCHED DESERT CLOAK (CON) added to Inventory]" << std::endl;
 					break;
 				case 1:
 					std::cout << "As you approach the well, you feel a faint breeze. When you peer inside," <<
 						std::endl << "you find a flexible and durable whip made from a mix of hardened leather and desert vines." << std::endl;
 					player.dexItems++;
+					(player.dexItems % 2 == 0) ? player.dexterity++ : player.dexterity;
+					std::cout << "[WHIP OF THE DESERT NOMAD (DEX) added to Inventory]" << std::endl;
 					break;
 				case 2:
 					std::cout << "As you kneel by the well, you notice a scroll lying on the ground. Upon further inspection," <<
 						std::endl << "you find the ancient scroll to contain knowledge passed down through generations, written in fading ink but still legible." << std::endl;
 					player.wisItems++;
+					(player.wisItems % 2 == 0) ? player.wisdom++ : player.wisdom;
+					std::cout << "[ANCIENT SANDSCROLL (WIS) added to Inventory]" << std::endl;
 				}
 			}
 		}
@@ -437,6 +464,7 @@ void Game::printFieldMessage(Field::FieldType type)
 				break;
 			}
 			player.health++;
+			std::cout << "[+1 hp]" << std::endl;
 		}
 		else {
 			//something is wrong with the well -> +0 hp
@@ -459,7 +487,7 @@ void Game::printFieldMessage(Field::FieldType type)
 		break;
 	case Field::FieldType::RELIC:
 		std::cout << "Something buried in the ground catches the glimpse of your eye." << std::endl;
-		if (level < 3)
+		if (stage == 3)
 		{
 			//possibility of obtaining an item
 			if (rand() % 100 >= 70)
@@ -470,47 +498,104 @@ void Game::printFieldMessage(Field::FieldType type)
 				switch (rand() % 3)
 				{
 				case 0:
-					std::cout << "a scorched desert cloack woven from thick desert plans and animal hides, whethered by the sun's relentless heat." << std::endl;
+					std::cout << "a scorched desert cloak woven from thick desert plans and animal hides, whethered by the sun's relentless heat." << std::endl;
 					player.conItems++;
+					std::cout << "[SCORCHED DESERT CLOAK added to Inventory]" << std::endl;
 					break;
 				case 1:
 					std::cout << "a flexible and durable whip made from a mix of hardened leather and desert vines." << std::endl;
 					player.dexItems++;
+					std::cout << "[WHIP OF THE DESERT NOMAD added to Inventory]" << std::endl;
 					break;
 				case 2:
 					std::cout << "an ancient scroll to contain knowledge passed down through generations, written in fading ink but still legible." << std::endl;
 					player.wisItems++;
+					std::cout << "[ANCIENT SANDSCROLL added to Inventory]" << std::endl;
 					break;
 				}
 			}
 		}
+		switch (rand() % 3)
+		{
+			//relic found -> +1 relic
+		case 0:
+			std::cout << "As you brush away the loose sand, your fingers strike something solid - an ancient artifact, half-buried and forgotten by time." <<
+				std::endl << "The moment you lift it, a faint whisper of wind stirs around you, as if the desert itself acknowledges your discovery." << std::endl;
+			break;
+		case 1:
+			std::cout << "Resting atop a sun-bleached stone, a relic glows faintly in the shifting light, untouched by time." <<
+				std::endl << "As you reach for it, a strange sensation washes over you - memories not your own, lingering like echoes in the dunes." << std::endl;
+			break;
+		case 2:
+			std::cout << "A sudden gust of wind parts the sand, revealing the faint glint of something hidden beneath the surface. As you dig," <<
+				std::endl << "your hands close around a relic, its surface warm from the sun, its presence a silent testament to the forgotten ones who walked this land before you." << std::endl;
+			break;
+		}
+		player.relics++;
+		disboard.relicsFound++;
+		std::cout << "[+1 relic]" << std::endl;
+		break;
 	}
 }
-bool Game::rollSavingThrow(int difficultyClass, bool hasAdvantage)
+bool Game::rollSavingThrow(int difficultyClass, int rollType, int items)
 {
 	int roll;
 	int advantageRoll;
-	system("cls");
+	int modifier;
+	switch (rollType)
+	{
+	case 0:
+		modifier = (player.constitution - 10) / 2;
+		break;
+	case 1:
+		modifier = (player.dexterity - 10) / 2;
+		break;
+	case 2:
+		modifier = (player.wisdom - 10) / 2;
+		break;
+	}
+	printSeparator();
+	std::cout << "DC: " << difficultyClass << std::endl;
 	std::cout << "Press ENTER to roll a saving throw..." << std::endl;
 	std::cin.get();
 	printSeparator();
 	std::cout << "Rolling saving throw..." << std::endl;
 	roll = rand() % 20 + 1;
-	std::cout << "Rolled: " << roll << std::endl;
-
-	if (hasAdvantage)
+	std::cout << "Rolled: " << roll;
+	std::cout << " + " << modifier;
+	roll += modifier;
+	std::cout << " = " << roll << std::endl;
+	std::cout << "Advantage roll? ";
+	if (items > 0)
 	{
+		std::cout << "yes" << std::endl;
+		printSeparator();
+		std::cout << "Press ENTER to roll a saving throw..." << std::endl;
+		std::cin.get();
+		printSeparator();
+		std::cout << "Rolling saving throw..." << std::endl;
 		advantageRoll = rand() % 20 + 1;
-		std::cout << "Advantage Roll: " << advantageRoll << std::endl;
+		std::cout << "Rolled: " << advantageRoll;
+		std::cout << " + " << modifier;
+		roll += modifier;
+		std::cout << " = " << advantageRoll << std::endl;
+	}
+	else {
+		std::cout << "no" << std::endl;
+		advantageRoll = roll;
 	}
 	if (roll >= difficultyClass || advantageRoll >= difficultyClass)
 	{
 		std::cout << "You have passed the saving throw!" << std::endl;
+		std::cout << "Press ENTER to continue..." << std::endl;
+		std::cin.get();
 		return true;
 	}
 	else
 	{
 		std::cout << "You have failed the saving throw!" << std::endl;
+		std::cout << "Press ENTER to continue..." << std::endl;
+		std::cin.get();
 		return false;
 	}
 }
@@ -521,16 +606,29 @@ void Game::endGame()
 	system("cls");
 	if (player.relics == disboard.totalRelics)
 	{
+		std::cout << "The shifting sand whisper your triumph as the final relic rests in your hands." <<
+			std::endl << "Yet, the desert is ever-changing - winds reshape the dunes, and new echoes stir beneath the sun-scorched expanse." <<
+			std::endl << "Your journey does not end; it mearely begins anew." << std::endl;
+		printSeparator();
 		std::cout << "Congratulations! You have found all the relics!" << std::endl;
 
 	}
 	else if (player.health == 0)
 	{
+		std::cout << "The heat weighs heave, each step slower than the last." <<
+			std::endl << "As strength fades and the desert swallows your weary form," <<
+			std::endl << "the elics slip from your grasp, lost once more to time and sand." << std::endl;
+
+		printSeparator();
 		std::cout << "Game Over! You have perished in the desert." << std::endl;
 
 	}
 	else if (player.position.x == enemy.position.x && player.position.y == enemy.position.y)
 	{
+		std::cout << "A fleeting shadow, then a rush of movement - too fast to escape." <<
+			std::endl << "The last thing you see is the dunes stretching endlessly before you," <<
+			std::endl << "the echoes of past wanderers fading into the wind as you become one of them." << std::endl;
+		printSeparator();
 		std::cout << "Game Over! You have been caught by the desert's guardian." << std::endl;
 
 	}

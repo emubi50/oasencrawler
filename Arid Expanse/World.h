@@ -17,5 +17,6 @@ public:
 	Field world[5][5];
 	Position previousPosition;
 	int totalRelics;
+	int relicsFound;
 };
 

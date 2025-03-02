@@ -6,6 +6,7 @@
 World::World()
 {
 	totalRelics = 0;
+	relicsFound = 0;
 	previousPosition.x = 0;
 	previousPosition.y = 0;
 	for (int i = 0; i < 5; i++)
@@ -37,6 +38,7 @@ World::World()
 World::World(int emptyChance, int dangerChance, int wellChance, int relicChance, Position prev)
 {
 	totalRelics = 0;
+	relicsFound = 0;
 	previousPosition = prev;
 	dangerChance += emptyChance;
 	wellChance += dangerChance;

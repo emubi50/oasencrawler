@@ -21,9 +21,9 @@ Entity::Entity(int x, int y)
 	position.y = y;
 	health = 5;
 	relics = 0;
-	constitution = 0;
-	dexterity = 0;
-	wisdom = 0;
+	constitution = 10;
+	dexterity = 10;
+	wisdom = 10;
 	conItems = 0;
 	dexItems = 0;
 	wisItems = 0;
