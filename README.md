@@ -42,7 +42,7 @@ This project is a university project and serves to solidify my understanding of 
 ## Planned Features
 - Enemies that chase the player.
 - Increasing difficulty as relics are collected.
-- Additional character atrributes and items for enhanced gameplay.
+- Additional character attributes and items for enhanced gameplay.
 
 
 <!-- ## Screenshots -->
@@ -54,7 +54,7 @@ This project is a university project and serves to solidify my understanding of 
 ## Setup
 What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
 
-Proceed to describe how to install / setup one's local environment / get started with the project.
+Proceed to describe how to install / set up one's local environment / get started with the project.
 -->
 
 ## Usage
@@ -64,23 +64,22 @@ Proceed to describe how to install / setup one's local environment / get started
 - Avoid the Hunter to not die.
 
 ## Project Status
-Project is: _in progress_.
+Project is: _done_.
 
 
 ## Room for Improvement
 <!--
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
+Include areas you believe need improvement / could be improved. Also, add TODOs for future development.
 -->
 <!--
 Room for improvement:
 - Improvement to be done 1
 - Improvement to be done 2
 -->
-To do:
-- Develop 'Stufe 3'
-- Merge all three games into one.
-- Create a menu in main() to select between the three games.
 
+- Fix redundancy in code
+- Fix out-of-bounds logic
+- Improve "story" elements i.e. narrations
 
 <!--
 ## Acknowledgements
@@ -99,4 +98,4 @@ Created by [@emubi50](https://www.github.com/emubi50/) - feel free to contact me
 Default copyright laws apply. All rights are retained and the reproduction, distribution, or creation of derivative works from this project are forbidden.
 <!-- This project is open source and available under the [... License](). -->
 
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+<!-- You don't have to include all sections - just the ones relevant to your project -->
